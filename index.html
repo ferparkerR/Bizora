@@ -1039,6 +1039,47 @@ tr:last-child td {
 
     </div>
 
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <h3 class="panel-title">Data & Backup</h3>
+      <p class="panel-subtitle">Amankan dan ekspor data usaha kamu</p>
+    </div>
+  </div>
+
+  <div style="display:grid;gap:12px">
+
+    <button class="btn btn-primary" onclick="backupData()">
+      💾 Backup Semua Data
+    </button>
+
+    <button class="btn btn-light" onclick="exportTransactions()">
+      📊 Export Transaksi CSV
+    </button>
+
+    <button class="btn btn-light" onclick="exportExpenses()">
+      💸 Export Pengeluaran CSV
+    </button>
+
+    <button class="btn btn-light" onclick="document.getElementById('restoreFile').click()">
+      📂 Restore Backup
+    </button>
+
+    <input
+      type="file"
+      id="restoreFile"
+      accept=".json,application/json"
+      style="display:none"
+      onchange="restoreData(event)"
+    >
+
+  </div>
+
+  <p style="font-size:11px;color:#6b7280;margin-top:15px;line-height:1.6">
+    Simpan backup secara berkala agar data usaha kamu tetap aman.
+  </p>
+</div>
+
   </section>
 
   <!-- LAPORAN -->
@@ -2092,6 +2133,177 @@ function updateDate() {
       month: "long",
       year: "numeric"
     });
+}
+
+/* =========================
+   BIZORA V2 - BACKUP
+========================= */
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type: type });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+/* BACKUP JSON */
+
+function backupData() {
+  const backup = {
+    app: "Bizora",
+    version: "2.0",
+    backupDate: new Date().toISOString(),
+    data: data
+  };
+
+  const content = JSON.stringify(backup, null, 2);
+
+  downloadFile(
+    content,
+    "bizora-backup-" + today() + ".json",
+    "application/json"
+  );
+
+  toast("Backup berhasil dibuat!");
+}
+
+/* CSV HELPER */
+
+function convertToCSV(rows) {
+  return rows.map(row =>
+    row.map(value => {
+      const text = String(value ?? "").replaceAll('"', '""');
+      return `"${text}"`;
+    }).join(",")
+  ).join("\n");
+}
+
+/* EXPORT TRANSACTIONS */
+
+function exportTransactions() {
+  const rows = [
+    [
+      "Tanggal",
+      "Nama Produk",
+      "Jumlah",
+      "Harga Modal",
+      "Harga Jual",
+      "Total Penjualan",
+      "Laba"
+    ]
+  ];
+
+  data.transactions.forEach(t => {
+    rows.push([
+      t.date,
+      t.productName,
+      t.qty,
+      t.cost,
+      t.price,
+      t.total,
+      t.profit
+    ]);
+  });
+
+  const csv = "\uFEFF" + convertToCSV(rows);
+
+  downloadFile(
+    csv,
+    "bizora-transaksi-" + today() + ".csv",
+    "text/csv;charset=utf-8"
+  );
+
+  toast("Data transaksi berhasil diekspor!");
+}
+
+/* EXPORT EXPENSES */
+
+function exportExpenses() {
+  const rows = [
+    [
+      "Tanggal",
+      "Kategori",
+      "Keterangan",
+      "Jumlah"
+    ]
+  ];
+
+  data.expenses.forEach(e => {
+    rows.push([
+      e.date,
+      e.category,
+      e.description,
+      e.amount
+    ]);
+  });
+
+  const csv = "\uFEFF" + convertToCSV(rows);
+
+  downloadFile(
+    csv,
+    "bizora-pengeluaran-" + today() + ".csv",
+    "text/csv;charset=utf-8"
+  );
+
+  toast("Data pengeluaran berhasil diekspor!");
+}
+
+/* RESTORE BACKUP */
+
+function restoreData(event) {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    try {
+      const backup = JSON.parse(e.target.result);
+
+      const restored = backup.data || backup;
+
+      if (
+        !Array.isArray(restored.products) ||
+        !Array.isArray(restored.transactions) ||
+        !Array.isArray(restored.expenses)
+      ) {
+        throw new Error("Format backup tidak valid");
+      }
+
+      const confirmRestore = confirm(
+        "Restore backup akan mengganti data Bizora saat ini. " +
+        "Pastikan kamu sudah memiliki backup data terbaru. " +
+        "Lanjutkan?"
+      );
+
+      if (!confirmRestore) {
+        event.target.value = "";
+        return;
+      }
+
+      data = restored;
+
+      saveData();
+
+      toast("Data berhasil dipulihkan!");
+
+    } catch(error) {
+      alert("File backup tidak valid atau rusak.");
+    }
+
+    event.target.value = "";
+  };
+
+  reader.readAsText(file);
 }
 
 /* =========================
