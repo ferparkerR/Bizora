@@ -5,7 +5,101 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bizora - Business Dashboard</title>
+/* ===== BIZORA ANALYTICS UPGRADE ===== */
 
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:18px;
+}
+
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.period-select{
+  width:auto;
+  min-width:145px;
+  padding:10px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  background:white;
+}
+
+.chart-wrap{
+  height:210px;
+  display:flex;
+  align-items:flex-end;
+  gap:9px;
+  padding:12px 2px 0;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.bar-col{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  height:100%;
+  gap:6px;
+  min-width:0;
+}
+
+.bar{
+  width:min(100%,34px);
+  background:linear-gradient(180deg,#34d399,#059669);
+  border-radius:6px 6px 2px 2px;
+  min-height:3px;
+}
+
+.bar-label{
+  font-size:11px;
+  color:#64748b;
+}
+
+.bar-value{
+  font-size:10px;
+  color:#64748b;
+  white-space:nowrap;
+}
+
+.top-item{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+}
+
+.top-item:last-child{
+  border-bottom:0;
+}
+
+.stock-warning{
+  color:#b45309;
+  background:#fef3c7;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+@media(max-width:1000px){
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:420px){
+  .period-select{
+    min-width:125px;
+    padding:9px;
+  }
+}
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#f5f7f6;color:#1e293b}
@@ -69,51 +163,112 @@ th{color:#64748b;font-size:12px}
 
 <!-- DASHBOARD -->
 <section id="dashboard" class="page active">
+
   <div class="header">
     <div>
       <h1>Dashboard</h1>
-      <p class="subtitle">Ringkasan bisnis kamu hari ini 👋</p>
+      <p class="subtitle">Ringkasan bisnis kamu 👋</p>
     </div>
+
+    <select class="period-select" id="period" onchange="render()">
+      <option value="today">Hari ini</option>
+      <option value="7days" selected>7 hari terakhir</option>
+      <option value="month">Bulan ini</option>
+      <option value="all">Semua waktu</option>
+    </select>
   </div>
 
   <div class="cards">
+
     <div class="card">
       <p>Omzet</p>
       <h2 id="revenue">Rp0</h2>
+      <p style="margin-top:8px;font-size:12px">Total penjualan</p>
     </div>
+
     <div class="card">
-      <p>Keuntungan Kotor</p>
+      <p>Laba Bersih</p>
       <h2 class="green" id="profit">Rp0</h2>
+      <p style="margin-top:8px;font-size:12px">Setelah pengeluaran</p>
     </div>
+
     <div class="card">
       <p>Transaksi</p>
       <h2 id="count">0</h2>
+      <p style="margin-top:8px;font-size:12px">Jumlah penjualan</p>
     </div>
+
     <div class="card">
       <p>Pengeluaran</p>
       <h2 id="expenseTotal">Rp0</h2>
+      <p style="margin-top:8px;font-size:12px">Biaya operasional</p>
     </div>
+
   </div>
 
-  <div class="content">
-    <h3>Ringkasan Bisnis</h3>
-    <div class="notice">
-      Selamat datang di Bizora! Catat transaksi dan produk
-      kamu untuk melihat ringkasan bisnis secara otomatis.
+  <div class="dashboard-grid">
+
+    <div class="content">
+      <div class="section-heading">
+        <h3 style="margin:0">Grafik Omzet</h3>
+        <span class="badge" id="chartCaption">7 hari</span>
+      </div>
+
+      <div id="revenueChart" class="chart-wrap"></div>
     </div>
-    <p>Jumlah produk: <b id="productCount">0</b></p>
-    <p style="margin-top:10px">Total stok: <b id="stockCount">0</b></p>
+
+    <div class="content">
+      <h3>Ringkasan Bisnis</h3>
+
+      <div class="notice" id="businessNotice">
+        Selamat datang di Bizora! Catat transaksi dan produk kamu untuk melihat ringkasan bisnis secara otomatis.
+      </div>
+
+      <div class="top-item">
+        <span>Jumlah produk</span>
+        <b id="productCount">0</b>
+      </div>
+
+      <div class="top-item">
+        <span>Total stok</span>
+        <b id="stockCount">0</b>
+      </div>
+
+      <div class="top-item">
+        <span>Margin laba</span>
+        <b id="margin">0%</b>
+      </div>
+    </div>
+
+    <div class="content">
+      <h3>Produk Terlaris</h3>
+      <div id="topProducts"></div>
+    </div>
+
+    <div class="content">
+      <h3>Perhatian Stok</h3>
+      <div id="lowStock"></div>
+    </div>
+
   </div>
 
   <div class="content">
     <h3>Transaksi Terbaru</h3>
+
     <table>
       <thead>
-        <tr><th>Produk</th><th>Jumlah</th><th>Total</th></tr>
+        <tr>
+          <th>Produk</th>
+          <th>Jumlah</th>
+          <th>Total</th>
+          <th>Tanggal</th>
+        </tr>
       </thead>
+
       <tbody id="recentTransactions"></tbody>
     </table>
   </div>
+
 </section>
 
 <!-- PRODUCTS -->
@@ -294,12 +449,12 @@ function addExpense(){
     return;
   }
 
-  expenses.push({id:Date.now(),name,amount});
-  document.getElementById("expenseName").value="";
-  document.getElementById("expenseAmount").value="";
-  save();
-  alert("Pengeluaran berhasil dicatat!");
-}
+  expenses.push({
+  id:Date.now(),
+  name,
+  amount,
+  date:new Date().toISOString()
+});
 
 function deleteExpense(id){
   if(confirm("Hapus pengeluaran ini?")){
@@ -308,7 +463,369 @@ function deleteExpense(id){
   }
 }
 
+function inPeriod(date, period){
+
+  if(!date) return period==="all";
+
+  const d = new Date(date);
+  const now = new Date();
+
+  if(period==="all"){
+    return true;
+  }
+
+  if(period==="today"){
+    return d.toDateString()===now.toDateString();
+  }
+
+  if(period==="7days"){
+    const start = new Date(now);
+    start.setDate(now.getDate()-6);
+    start.setHours(0,0,0,0);
+
+    return d>=start && d<=now;
+  }
+
+  if(period==="month"){
+    return d.getMonth()===now.getMonth()
+      && d.getFullYear()===now.getFullYear();
+  }
+
+  return true;
+}
+
+
+function dateLabel(date){
+
+  if(!date) return "-";
+
+  return new Date(date).toLocaleDateString("id-ID",{
+    day:"2-digit",
+    month:"short"
+  });
+}
+
+
+function renderChart(filtered){
+
+  const period = document.getElementById("period").value;
+
+  let labels = [];
+
+  if(period==="today"){
+
+    labels=[new Date()];
+
+  }else{
+
+    labels=Array.from({length:7},(_,i)=>{
+
+      const d=new Date();
+
+      d.setDate(d.getDate()-6+i);
+
+      return d;
+
+    });
+
+  }
+
+  const vals=labels.map(d=>{
+
+    return filtered
+      .filter(t=>new Date(t.date).toDateString()===d.toDateString())
+      .reduce((s,t)=>s+t.total,0);
+
+  });
+
+  const max=Math.max(...vals,1);
+
+  document.getElementById("chartCaption").textContent=
+    period==="today"?"Hari ini":
+    period==="month"?"Bulan ini":
+    period==="all"?"Semua waktu":
+    "7 hari";
+
+  document.getElementById("revenueChart").innerHTML=
+
+    labels.map((d,i)=>`
+
+      <div class="bar-col">
+
+        <span class="bar-value">
+          ${vals[i]?money(vals[i]):""}
+        </span>
+
+        <div class="bar"
+          style="height:${Math.max(3,vals[i]/max*100)}%">
+        </div>
+
+        <span class="bar-label">
+          ${period==="today"
+            ?"Hari ini"
+            :d.toLocaleDateString("id-ID",{weekday:"short"})}
+        </span>
+
+      </div>
+
+    `).join("");
+
+}
+
+
 function render(){
+
+  const period=
+    document.getElementById("period")?.value
+    ||"7days";
+
+  const ft=transactions.filter(t=>inPeriod(t.date,period));
+
+  const fe=expenses.filter(e=>inPeriod(e.date,period));
+
+  const revenue=ft.reduce((s,t)=>s+t.total,0);
+
+  const gross=ft.reduce((s,t)=>s+t.profit,0);
+
+  const expenseTotal=fe.reduce((s,e)=>s+e.amount,0);
+
+  const net=gross-expenseTotal;
+
+
+  // DASHBOARD STATISTIK
+
+  document.getElementById("revenue").textContent=money(revenue);
+
+  document.getElementById("profit").textContent=money(net);
+
+  document.getElementById("count").textContent=ft.length;
+
+  document.getElementById("expenseTotal").textContent=money(expenseTotal);
+
+  document.getElementById("productCount").textContent=products.length;
+
+  document.getElementById("stockCount").textContent=
+    products.reduce((s,p)=>s+p.stock,0);
+
+  document.getElementById("margin").textContent=
+    revenue ? Math.round(net/revenue*100)+"%" : "0%";
+
+
+  // RINGKASAN
+
+  document.getElementById("businessNotice").textContent=
+
+    ft.length
+
+    ? `Pada periode ini, omzet ${money(revenue)} dengan laba bersih ${money(net)}. Pantau terus perkembangan usahamu!`
+
+    : "Belum ada transaksi pada periode ini. Tambahkan transaksi untuk melihat analisis bisnis.";
+
+
+  // GRAFIK
+
+  renderChart(ft);
+
+
+  // PRODUK TERLARIS
+
+  const ranking={};
+
+  transactions.forEach(t=>{
+
+    ranking[t.name]=(ranking[t.name]||0)+t.qty;
+
+  });
+
+  const top=Object.entries(ranking)
+
+    .sort((a,b)=>b[1]-a[1])
+
+    .slice(0,5);
+
+
+  document.getElementById("topProducts").innerHTML=
+
+    top.length
+
+    ? top.map((x,i)=>`
+
+      <div class="top-item">
+
+        <span>${i+1}. ${x[0]}</span>
+
+        <b>${x[1]} terjual</b>
+
+      </div>
+
+    `).join("")
+
+    : `<div class="empty">Belum ada penjualan</div>`;
+
+
+  // PERINGATAN STOK
+
+  const low=products.filter(p=>p.stock<=5);
+
+
+  document.getElementById("lowStock").innerHTML=
+
+    low.length
+
+    ? low.map(p=>`
+
+      <div class="top-item">
+
+        <span>${p.name}</span>
+
+        <span class="stock-warning">Stok ${p.stock}</span>
+
+      </div>
+
+    `).join("")
+
+    : `<div class="notice">Semua stok masih aman 👍</div>`;
+
+
+  // TABEL PRODUK
+
+  document.getElementById("productTable").innerHTML=
+
+    products.length
+
+    ? products.map(p=>`
+
+      <tr>
+
+        <td>${p.name}</td>
+
+        <td>${money(p.price)}</td>
+
+        <td>${money(p.cost)}</td>
+
+        <td>
+          ${p.stock}
+          ${p.stock<=5
+            ? '<span class="stock-warning">Menipis</span>'
+            : ''}
+        </td>
+
+        <td>
+          <button class="danger"
+            onclick="deleteProduct(${p.id})">
+            Hapus
+          </button>
+        </td>
+
+      </tr>
+
+    `).join("")
+
+    : `<tr><td colspan="5" class="empty">Belum ada produk</td></tr>`;
+
+
+  // PILIH PRODUK UNTUK TRANSAKSI
+
+  document.getElementById("transactionProduct").innerHTML=
+
+    `<option value="">Pilih produk</option>`
+
+    +products.map(p=>`
+
+      <option value="${p.id}">
+
+        ${p.name} — ${money(p.price)} (stok ${p.stock})
+
+      </option>
+
+    `).join("");
+
+
+  // RIWAYAT TRANSAKSI
+
+  document.getElementById("transactionTable").innerHTML=
+
+    transactions.length
+
+    ? [...transactions].reverse().map(t=>`
+
+      <tr>
+
+        <td>${t.name}</td>
+
+        <td>${t.qty}</td>
+
+        <td>${money(t.total)}</td>
+
+        <td>${money(t.profit)}</td>
+
+      </tr>
+
+    `).join("")
+
+    : `<tr><td colspan="4" class="empty">Belum ada transaksi</td></tr>`;
+
+
+  // TRANSAKSI TERBARU
+
+  document.getElementById("recentTransactions").innerHTML=
+
+    transactions.length
+
+    ? [...transactions].reverse().slice(0,5).map(t=>`
+
+      <tr>
+
+        <td>${t.name}</td>
+
+        <td>${t.qty}</td>
+
+        <td>${money(t.total)}</td>
+
+        <td>${dateLabel(t.date)}</td>
+
+      </tr>
+
+    `).join("")
+
+    : `<tr><td colspan="4" class="empty">Belum ada transaksi</td></tr>`;
+
+
+  // RIWAYAT PENGELUARAN
+
+  document.getElementById("expenseTable").innerHTML=
+
+    expenses.length
+
+    ? [...expenses].reverse().map(e=>`
+
+      <tr>
+
+        <td>${e.name}</td>
+
+        <td>${money(e.amount)}</td>
+
+        <td>${dateLabel(e.date)}</td>
+
+        <td>
+
+          <button class="danger"
+
+            onclick="deleteExpense(${e.id})">
+
+            Hapus
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    `).join("")
+
+    : `<tr><td colspan="4" class="empty">Belum ada pengeluaran</td></tr>`;
+
+}r(){
   const revenue=transactions.reduce((s,t)=>s+t.total,0);
   const profit=transactions.reduce((s,t)=>s+t.profit,0);
   const expenseTotal=expenses.reduce((s,e)=>s+e.amount,0);
