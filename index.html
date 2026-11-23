@@ -7,833 +7,2102 @@
 <title>Bizora - Business Dashboard</title>
 
 <style>
-/* ===== BIZORA ANALYTICS UPGRADE ===== */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1.35fr 1fr;
-  gap:18px;
+:root {
+  --primary: #16a34a;
+  --primary-dark: #15803d;
+  --primary-light: #dcfce7;
+  --bg: #f7f9f8;
+  --white: #ffffff;
+  --text: #17211b;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --red: #ef4444;
+  --orange: #f59e0b;
 }
 
-.section-heading{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom:15px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.period-select{
-  width:auto;
-  min-width:145px;
-  padding:10px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  background:white;
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.chart-wrap{
-  height:210px;
-  display:flex;
-  align-items:flex-end;
-  gap:9px;
-  padding:12px 2px 0;
-  border-bottom:1px solid #e5e7eb;
+button, input, select {
+  font-family: inherit;
 }
 
-.bar-col{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-end;
-  height:100%;
-  gap:6px;
-  min-width:0;
+button {
+  cursor: pointer;
+  border: none;
 }
 
-.bar{
-  width:min(100%,34px);
-  background:linear-gradient(180deg,#34d399,#059669);
-  border-radius:6px 6px 2px 2px;
-  min-height:3px;
+.app {
+  display: flex;
+  min-height: 100vh;
 }
 
-.bar-label{
-  font-size:11px;
-  color:#64748b;
+/* SIDEBAR */
+
+.sidebar {
+  width: 250px;
+  background: #fff;
+  border-right: 1px solid var(--border);
+  padding: 25px 18px;
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
 }
 
-.bar-value{
-  font-size:10px;
-  color:#64748b;
-  white-space:nowrap;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px 30px;
 }
 
-.top-item{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #eee;
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--primary);
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 23px;
+  font-weight: 800;
 }
 
-.top-item:last-child{
-  border-bottom:0;
+.logo-text {
+  font-family: 'Manrope', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
 }
 
-.stock-warning{
-  color:#b45309;
-  background:#fef3c7;
-  padding:5px 8px;
-  border-radius:20px;
-  font-size:12px;
+.logo-text span {
+  color: var(--primary);
 }
 
-@media(max-width:1000px){
+.nav-label {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 10px 12px;
+}
 
-  .dashboard-grid{
-    grid-template-columns:1fr;
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px;
+  border-radius: 10px;
+  color: #647067;
+  margin-bottom: 4px;
+  font-size: 14px;
+  transition: .2s;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: #f3f7f4;
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.nav-icon {
+  font-size: 18px;
+  width: 23px;
+  text-align: center;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  background: #f4f8f5;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.sidebar-bottom h4 {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.sidebar-bottom p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* MAIN */
+
+.main {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 30px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 15px;
+}
+
+.page-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.page-subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.date-box {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #647067;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* CARDS */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.green-bg { background: #dcfce7; }
+.blue-bg { background: #dbeafe; }
+.orange-bg { background: #fef3c7; }
+.purple-bg { background: #f3e8ff; }
+
+.card-value {
+  font-family: 'Manrope', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.card-footer {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.positive {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* CONTENT GRID */
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.panel-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.chart-container {
+  height: 250px;
+  position: relative;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+select, input {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 12px;
+  font-size: 13px;
+  outline: none;
+  background: white;
+  width: 100%;
+}
+
+select:focus, input:focus {
+  border-color: var(--primary);
+}
+
+.small-select {
+  width: auto;
+  padding: 8px 12px;
+}
+
+/* TABLE */
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 500px;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0f2f0;
+  font-size: 13px;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status-green {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.status-orange {
+  color: #b45309;
+  background: #fef3c7;
+}
+
+.status-red {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+/* BUTTONS */
+
+.btn {
+  padding: 11px 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-light {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-small {
+  padding: 7px 10px;
+  font-size: 11px;
+}
+
+.action-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* PAGE */
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.page-section {
+  margin-bottom: 25px;
+}
+
+/* FORMS */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+.form-full {
+  grid-column: 1 / -1;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+}
+
+.close-btn {
+  font-size: 25px;
+  background: transparent;
+  color: #9ca3af;
+}
+
+/* EMPTY */
+
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+}
+
+.empty-icon {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+.empty h3 {
+  font-size: 15px;
+  color: #374151;
+  margin-bottom: 5px;
+}
+
+.empty p {
+  font-size: 12px;
+}
+
+/* REPORT */
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.report-item {
+  padding: 18px;
+  background: #f8faf9;
+  border-radius: 12px;
+}
+
+.report-item p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.report-item h3 {
+  font-size: 21px;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* TOAST */
+
+.toast {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #17211b;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  z-index: 500;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: .3s;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* MOBILE */
+
+.mobile-header {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media(max-width:420px){
-
-  .period-select{
-    min-width:125px;
-    padding:9px;
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    padding: 8px 5px;
+    border-top: 1px solid var(--border);
+    border-right: none;
+    background: white;
   }
 
+  .logo,
+  .nav-label,
+  .sidebar-bottom {
+    display: none;
+  }
+
+  .sidebar nav {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 4px;
+    margin: 0;
+    font-size: 9px;
+    border-radius: 8px;
+    width: auto;
+    flex: 1;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+    padding: 18px 15px 100px;
+  }
+
+  .topbar {
+    margin-bottom: 22px;
+  }
+
+  .page-title {
+    font-size: 21px;
+  }
+
+  .date-box {
+    display: none;
+  }
+
+  .cards {
+    gap: 10px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .card-value {
+    font-size: 19px;
+  }
+
+  .card-label {
+    font-size: 11px;
+  }
+
+  .card-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .chart-container {
+    height: 220px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-full {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="sidebar">
-  <div class="logo">✦ Bizora</div>
-  <div class="menu">
-    <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
-    <button onclick="showPage('products',this)">Produk</button>
-    <button onclick="showPage('transactions',this)">Transaksi</button>
-    <button onclick="showPage('expenses',this)">Pengeluaran</button>
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+  <div class="logo">
+    <div class="logo-icon">B</div>
+    <div class="logo-text">bizora<span>.</span></div>
   </div>
-</div>
 
-<div class="main">
+  <div class="nav-label">MENU UTAMA</div>
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="page active">
+  <nav>
+    <button class="nav-item active" data-page="dashboard">
+      <span class="nav-icon">▦</span>
+      Dashboard
+    </button>
 
-  <div class="header">
+    <button class="nav-item" data-page="transaksi">
+      <span class="nav-icon">⇄</span>
+      Transaksi
+    </button>
+
+    <button class="nav-item" data-page="produk">
+      <span class="nav-icon">▣</span>
+      Produk
+    </button>
+
+    <button class="nav-item" data-page="stok">
+      <span class="nav-icon">▤</span>
+      Stok Barang
+    </button>
+
+    <button class="nav-item" data-page="pengeluaran">
+      <span class="nav-icon">↘</span>
+      Pengeluaran
+    </button>
+
+    <button class="nav-item" data-page="laporan">
+      <span class="nav-icon">▥</span>
+      Laporan
+    </button>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <h4>Bizora Business</h4>
+    <p>Kelola usaha dengan lebih mudah, praktis, dan terorganisir.</p>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+
+<main class="main">
+
+  <div class="topbar">
     <div>
-      <h1>Dashboard</h1>
-      <p class="subtitle">Ringkasan bisnis kamu 👋</p>
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      <p class="page-subtitle" id="pageSubtitle">
+        Ringkasan kondisi usaha kamu hari ini.
+      </p>
     </div>
 
-    <select class="period-select" id="period" onchange="render()">
-      <option value="today">Hari ini</option>
-      <option value="7days" selected>7 hari terakhir</option>
-      <option value="month">Bulan ini</option>
-      <option value="all">Semua waktu</option>
-    </select>
+    <div class="top-right">
+      <div class="date-box" id="currentDate"></div>
+      <div class="avatar">B</div>
+    </div>
   </div>
 
-  <div class="cards">
+  <!-- DASHBOARD -->
 
-    <div class="card">
-      <p>Omzet</p>
-      <h2 id="revenue">Rp0</h2>
-      <p style="margin-top:8px;font-size:12px">Total penjualan</p>
-    </div>
+  <section class="page active" id="dashboard">
 
-    <div class="card">
-      <p>Laba Bersih</p>
-      <h2 class="green" id="profit">Rp0</h2>
-      <p style="margin-top:8px;font-size:12px">Setelah pengeluaran</p>
-    </div>
+    <div class="cards">
 
-    <div class="card">
-      <p>Transaksi</p>
-      <h2 id="count">0</h2>
-      <p style="margin-top:8px;font-size:12px">Jumlah penjualan</p>
-    </div>
-
-    <div class="card">
-      <p>Pengeluaran</p>
-      <h2 id="expenseTotal">Rp0</h2>
-      <p style="margin-top:8px;font-size:12px">Biaya operasional</p>
-    </div>
-
-  </div>
-
-  <div class="dashboard-grid">
-
-    <div class="content">
-      <div class="section-heading">
-        <h3 style="margin:0">Grafik Omzet</h3>
-        <span class="badge" id="chartCaption">7 hari</span>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-label">Omzet Hari Ini</span>
+          <div class="card-icon green-bg">💰</div>
+        </div>
+        <div class="card-value" id="todayRevenue">Rp 0</div>
+        <div class="card-footer">Total penjualan hari ini</div>
       </div>
 
-      <div id="revenueChart" class="chart-wrap"></div>
-    </div>
-
-    <div class="content">
-      <h3>Ringkasan Bisnis</h3>
-
-      <div class="notice" id="businessNotice">
-        Selamat datang di Bizora! Catat transaksi dan produk kamu untuk melihat ringkasan bisnis secara otomatis.
+      <div class="card">
+        <div class="card-top">
+          <span class="card-label">Keuntungan</span>
+          <div class="card-icon blue-bg">📈</div>
+        </div>
+        <div class="card-value" id="todayProfit">Rp 0</div>
+        <div class="card-footer">Estimasi laba penjualan hari ini</div>
       </div>
 
-      <div class="top-item">
-        <span>Jumlah produk</span>
-        <b id="productCount">0</b>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-label">Transaksi</span>
+          <div class="card-icon orange-bg">🛒</div>
+        </div>
+        <div class="card-value" id="todayTransactions">0</div>
+        <div class="card-footer">Transaksi hari ini</div>
       </div>
 
-      <div class="top-item">
-        <span>Total stok</span>
-        <b id="stockCount">0</b>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-label">Pengeluaran</span>
+          <div class="card-icon purple-bg">💸</div>
+        </div>
+        <div class="card-value" id="todayExpenses">Rp 0</div>
+        <div class="card-footer">Pengeluaran hari ini</div>
       </div>
 
-      <div class="top-item">
-        <span>Margin laba</span>
-        <b id="margin">0%</b>
-      </div>
     </div>
 
-    <div class="content">
-      <h3>Produk Terlaris</h3>
-      <div id="topProducts"></div>
-    </div>
-
-    <div class="content">
-      <h3>Perhatian Stok</h3>
-      <div id="lowStock"></div>
-    </div>
-
-  </div>
-
-  <div class="content">
-    <h3>Transaksi Terbaru</h3>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Produk</th>
-          <th>Jumlah</th>
-          <th>Total</th>
-          <th>Tanggal</th>
-        </tr>
-      </thead>
-
-      <tbody id="recentTransactions"></tbody>
-    </table>
-  </div>
-
-</section>
-
-<!-- PRODUCTS -->
-<section id="products" class="page">
-  <div class="header">
-    <div>
-      <h1>Produk</h1>
-      <p class="subtitle">Kelola produk dan stok usaha kamu</p>
-    </div>
-  </div>
-
-  <div class="content">
-    <h3>Tambah Produk</h3>
-    <div class="form">
-      <input id="productName" placeholder="Nama produk">
-      <div class="form-row">
-        <input id="productPrice" type="number" placeholder="Harga jual">
-        <input id="productCost" type="number" placeholder="Modal produk">
-      </div>
-      <input id="productStock" type="number" placeholder="Jumlah stok">
-      <button class="primary" onclick="addProduct()">+ Tambah Produk</button>
-    </div>
-  </div>
-
-  <div class="content">
-    <h3>Daftar Produk</h3>
-    <table>
-      <thead>
-        <tr><th>Produk</th><th>Harga</th><th>Modal</th><th>Stok</th><th>Aksi</th></tr>
-      </thead>
-      <tbody id="productTable"></tbody>
-    </table>
-  </div>
-</section>
-
-<!-- TRANSACTIONS -->
-<section id="transactions" class="page">
-  <div class="header">
-    <div>
-      <h1>Transaksi</h1>
-      <p class="subtitle">Catat penjualan usaha kamu</p>
-    </div>
-  </div>
-
-  <div class="content">
-    <h3>Tambah Transaksi</h3>
-    <div class="form">
-      <select id="transactionProduct"></select>
-      <input id="transactionQty" type="number" min="1" placeholder="Jumlah">
-      <button class="primary" onclick="addTransaction()">Simpan Transaksi</button>
-    </div>
-  </div>
-
-  <div class="content">
-    <h3>Riwayat Transaksi</h3>
-    <table>
-      <thead>
-        <tr><th>Produk</th><th>Jumlah</th><th>Total</th><th>Keuntungan</th></tr>
-      </thead>
-      <tbody id="transactionTable"></tbody>
-    </table>
-  </div>
-</section>
-
-<!-- EXPENSES -->
-<section id="expenses" class="page">
-  <div class="header">
-    <div>
-      <h1>Pengeluaran</h1>
-      <p class="subtitle">Catat biaya operasional bisnis</p>
-    </div>
-  </div>
-
-  <div class="content">
-    <h3>Tambah Pengeluaran</h3>
-    <div class="form">
-      <input id="expenseName" placeholder="Nama pengeluaran">
-      <input id="expenseAmount" type="number" placeholder="Jumlah (Rp)">
-      <button class="primary" onclick="addExpense()">Simpan Pengeluaran</button>
-    </div>
-  </div>
-
-  <div class="content">
-    <h3>Riwayat Pengeluaran</h3>
-    <table>
-      <thead><tr><th>Nama</th><th>Jumlah</th><th>Aksi</th></tr></thead>
-      <tbody id="expenseTable"></tbody>
-    </table>
-  </div>
-</section>
-
-</div>
-
-<script>
-const money = n => "Rp" + Number(n||0).toLocaleString("id-ID");
-
-let products = JSON.parse(localStorage.getItem("bizora_products")||"[]");
-let transactions = JSON.parse(localStorage.getItem("bizora_transactions")||"[]");
-let expenses = JSON.parse(localStorage.getItem("bizora_expenses")||"[]");
-
-function save(){
-  localStorage.setItem("bizora_products",JSON.stringify(products));
-  localStorage.setItem("bizora_transactions",JSON.stringify(transactions));
-  localStorage.setItem("bizora_expenses",JSON.stringify(expenses));
-  render();
-}
-
-function showPage(page,button){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(page).classList.add("active");
-  document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
-  button.classList.add("active");
-}
-
-function addProduct(){
-  const name=document.getElementById("productName").value.trim();
-  const price=Number(document.getElementById("productPrice").value);
-  const cost=Number(document.getElementById("productCost").value);
-  const stock=Number(document.getElementById("productStock").value);
-
-  if(!name||price<=0||cost<0||stock<0){
-    alert("Lengkapi data produk dengan benar.");
-    return;
-  }
-
-  products.push({id:Date.now(),name,price,cost,stock});
-  document.getElementById("productName").value="";
-  document.getElementById("productPrice").value="";
-  document.getElementById("productCost").value="";
-  document.getElementById("productStock").value="";
-  save();
-  alert("Produk berhasil ditambahkan!");
-}
-
-function deleteProduct(id){
-  if(confirm("Hapus produk ini?")){
-    products=products.filter(p=>p.id!==id);
-    save();
-  }
-}
-
-function addTransaction(){
-  const id=Number(document.getElementById("transactionProduct").value);
-  const qty=Number(document.getElementById("transactionQty").value);
-  const product=products.find(p=>p.id===id);
-
-  if(!product||qty<=0){
-    alert("Pilih produk dan masukkan jumlah.");
-    return;
-  }
-
-  if(qty>product.stock){
-    alert("Stok tidak mencukupi!");
-    return;
-  }
-
-  transactions.push({
-    id:Date.now(),
-    name:product.name,
-    qty,
-    total:product.price*qty,
-    profit:(product.price-product.cost)*qty,
-    date:new Date().toISOString()
-  });
-
-  product.stock-=qty;
-  document.getElementById("transactionQty").value="";
-  save();
-  alert("Transaksi berhasil disimpan!");
-}
-
-function addExpense(){
-  const name=document.getElementById("expenseName").value.trim();
-  const amount=Number(document.getElementById("expenseAmount").value);
-
-  if(!name||amount<=0){
-    alert("Masukkan nama dan nominal pengeluaran.");
-    return;
-  }
-
-  expenses.push({
-  id:Date.now(),
-  name,
-  amount,
-  date:new Date().toISOString()
-});
-
-function deleteExpense(id){
-  if(confirm("Hapus pengeluaran ini?")){
-    expenses=expenses.filter(e=>e.id!==id);
-    save();
-  }
-}
-
-function inPeriod(date, period){
-
-  if(!date) return period==="all";
-
-  const d = new Date(date);
-  const now = new Date();
-
-  if(period==="all"){
-    return true;
-  }
-
-  if(period==="today"){
-    return d.toDateString()===now.toDateString();
-  }
-
-  if(period==="7days"){
-    const start = new Date(now);
-    start.setDate(now.getDate()-6);
-    start.setHours(0,0,0,0);
-
-    return d>=start && d<=now;
-  }
-
-  if(period==="month"){
-    return d.getMonth()===now.getMonth()
-      && d.getFullYear()===now.getFullYear();
-  }
-
-  return true;
-}
-
-
-function dateLabel(date){
-
-  if(!date) return "-";
-
-  return new Date(date).toLocaleDateString("id-ID",{
-    day:"2-digit",
-    month:"short"
-  });
-}
-
-
-function renderChart(filtered){
-
-  const period = document.getElementById("period").value;
-
-  let labels = [];
-
-  if(period==="today"){
-
-    labels=[new Date()];
-
-  }else{
-
-    labels=Array.from({length:7},(_,i)=>{
-
-      const d=new Date();
-
-      d.setDate(d.getDate()-6+i);
-
-      return d;
-
-    });
-
-  }
-
-  const vals=labels.map(d=>{
-
-    return filtered
-      .filter(t=>new Date(t.date).toDateString()===d.toDateString())
-      .reduce((s,t)=>s+t.total,0);
-
-  });
-
-  const max=Math.max(...vals,1);
-
-  document.getElementById("chartCaption").textContent=
-    period==="today"?"Hari ini":
-    period==="month"?"Bulan ini":
-    period==="all"?"Semua waktu":
-    "7 hari";
-
-  document.getElementById("revenueChart").innerHTML=
-
-    labels.map((d,i)=>`
-
-      <div class="bar-col">
-
-        <span class="bar-value">
-          ${vals[i]?money(vals[i]):""}
-        </span>
-
-        <div class="bar"
-          style="height:${Math.max(3,vals[i]/max*100)}%">
+    <div class="content-grid">
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Grafik Omzet</h3>
+            <p class="panel-subtitle">Performa penjualan 7 hari terakhir</p>
+          </div>
         </div>
 
-        <span class="bar-label">
-          ${period==="today"
-            ?"Hari ini"
-            :d.toLocaleDateString("id-ID",{weekday:"short"})}
-        </span>
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Ringkasan Usaha</h3>
+            <p class="panel-subtitle">Informasi operasional</p>
+          </div>
+        </div>
+
+        <div class="report-grid" style="grid-template-columns:1fr">
+
+          <div class="report-item">
+            <p>Total Produk</p>
+            <h3 id="totalProducts">0</h3>
+          </div>
+
+          <div class="report-item">
+            <p>Stok Menipis</p>
+            <h3 id="lowStockCount">0</h3>
+          </div>
+
+          <div class="report-item">
+            <p>Total Omzet Bulan Ini</p>
+            <h3 id="monthRevenue">Rp 0</h3>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Transaksi Terbaru</h3>
+          <p class="panel-subtitle">Aktivitas penjualan terakhir</p>
+        </div>
+
+        <button class="btn btn-light" onclick="showPage('transaksi')">
+          Lihat Semua
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TANGGAL</th>
+              <th>PRODUK</th>
+              <th>JUMLAH</th>
+              <th>TOTAL</th>
+            </tr>
+          </thead>
+          <tbody id="recentTransactions"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- TRANSAKSI -->
+
+  <section class="page" id="transaksi">
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Catat Transaksi</h3>
+          <p class="panel-subtitle">Tambahkan penjualan baru ke usaha kamu</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openModal('transactionModal')">
+          + Transaksi Baru
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TANGGAL</th>
+              <th>PRODUK</th>
+              <th>JUMLAH</th>
+              <th>MODAL</th>
+              <th>TOTAL</th>
+              <th>LABA</th>
+              <th>AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="transactionTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PRODUK -->
+
+  <section class="page" id="produk">
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Daftar Produk</h3>
+          <p class="panel-subtitle">Kelola produk dan harga jual</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openModal('productModal')">
+          + Tambah Produk
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>NAMA PRODUK</th>
+              <th>HARGA MODAL</th>
+              <th>HARGA JUAL</th>
+              <th>STOK</th>
+              <th>LABA/PRODUK</th>
+              <th>AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="productTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- STOK -->
+
+  <section class="page" id="stok">
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Manajemen Stok</h3>
+          <p class="panel-subtitle">Pantau persediaan produk</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openModal('stockModal')">
+          + Tambah Stok
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>PRODUK</th>
+              <th>STOK</th>
+              <th>STATUS</th>
+              <th>UPDATE STOK</th>
+            </tr>
+          </thead>
+          <tbody id="stockTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PENGELUARAN -->
+
+  <section class="page" id="pengeluaran">
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Pengeluaran Usaha</h3>
+          <p class="panel-subtitle">Catat biaya operasional usaha</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openModal('expenseModal')">
+          + Tambah Pengeluaran
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TANGGAL</th>
+              <th>KATEGORI</th>
+              <th>KETERANGAN</th>
+              <th>JUMLAH</th>
+              <th>AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="expenseTable"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- LAPORAN -->
+
+  <section class="page" id="laporan">
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Laporan Usaha</h3>
+          <p class="panel-subtitle">Analisis keuangan usaha kamu</p>
+        </div>
+
+        <select class="small-select" id="reportPeriod" onchange="renderReports()">
+          <option value="today">Hari Ini</option>
+          <option value="week">7 Hari Terakhir</option>
+          <option value="month" selected>Bulan Ini</option>
+          <option value="all">Semua Waktu</option>
+        </select>
+      </div>
+
+      <div class="report-grid">
+
+        <div class="report-item">
+          <p>Total Omzet</p>
+          <h3 id="reportRevenue">Rp 0</h3>
+        </div>
+
+        <div class="report-item">
+          <p>Total Modal Terjual</p>
+          <h3 id="reportCost">Rp 0</h3>
+        </div>
+
+        <div class="report-item">
+          <p>Laba Kotor</p>
+          <h3 id="reportGross">Rp 0</h3>
+        </div>
+
+        <div class="report-item">
+          <p>Total Pengeluaran</p>
+          <h3 id="reportExpenses">Rp 0</h3>
+        </div>
+
+        <div class="report-item">
+          <p>Laba Bersih</p>
+          <h3 id="reportNet">Rp 0</h3>
+        </div>
+
+        <div class="report-item">
+          <p>Total Transaksi</p>
+          <h3 id="reportCount">0</h3>
+        </div>
 
       </div>
 
-    `).join("");
+    </div>
 
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Produk Terlaris</h3>
+          <p class="panel-subtitle">Produk dengan penjualan terbanyak</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>PRODUK</th>
+              <th>TERJUAL</th>
+              <th>OMZET</th>
+            </tr>
+          </thead>
+          <tbody id="bestProducts"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+</div>
+
+<!-- MODAL PRODUK -->
+
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Tambah Produk</h2>
+      <button class="close-btn" onclick="closeModal('productModal')">×</button>
+    </div>
+
+    <form id="productForm">
+
+      <div class="form-group">
+        <label>Nama Produk</label>
+        <input id="productName" required placeholder="Contoh: Kopi Susu">
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Harga Modal</label>
+          <input id="productCost" type="number" min="0" required placeholder="0">
+        </div>
+
+        <div class="form-group">
+          <label>Harga Jual</label>
+          <input id="productPrice" type="number" min="0" required placeholder="0">
+        </div>
+
+        <div class="form-group form-full">
+          <label>Stok Awal</label>
+          <input id="productStock" type="number" min="0" required placeholder="0">
+        </div>
+
+      </div>
+
+      <button class="btn btn-primary" style="width:100%">
+        Simpan Produk
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- MODAL TRANSAKSI -->
+
+<div class="modal-overlay" id="transactionModal">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Transaksi Baru</h2>
+      <button class="close-btn" onclick="closeModal('transactionModal')">×</button>
+    </div>
+
+    <form id="transactionForm">
+
+      <div class="form-group">
+        <label>Produk</label>
+        <select id="transactionProduct" required></select>
+      </div>
+
+      <div class="form-group">
+        <label>Jumlah</label>
+        <input id="transactionQty" type="number" min="1" required value="1">
+      </div>
+
+      <div class="report-item" style="margin-bottom:20px">
+        <p>Total Penjualan</p>
+        <h3 id="transactionTotal">Rp 0</h3>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%">
+        Simpan Transaksi
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- MODAL STOK -->
+
+<div class="modal-overlay" id="stockModal">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Tambah Stok</h2>
+      <button class="close-btn" onclick="closeModal('stockModal')">×</button>
+    </div>
+
+    <form id="stockForm">
+
+      <div class="form-group">
+        <label>Produk</label>
+        <select id="stockProduct" required></select>
+      </div>
+
+      <div class="form-group">
+        <label>Jumlah Tambahan</label>
+        <input id="stockQty" type="number" min="1" required placeholder="0">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%">
+        Tambahkan Stok
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- MODAL PENGELUARAN -->
+
+<div class="modal-overlay" id="expenseModal">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Tambah Pengeluaran</h2>
+      <button class="close-btn" onclick="closeModal('expenseModal')">×</button>
+    </div>
+
+    <form id="expenseForm">
+
+      <div class="form-group">
+        <label>Kategori</label>
+        <select id="expenseCategory" required>
+          <option value="">Pilih kategori</option>
+          <option>Belanja Bahan</option>
+          <option>Operasional</option>
+          <option>Transportasi</option>
+          <option>Gaji</option>
+          <option>Listrik & Air</option>
+          <option>Sewa</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Keterangan</label>
+        <input id="expenseDescription" required placeholder="Contoh: Beli bahan baku">
+      </div>
+
+      <div class="form-group">
+        <label>Jumlah Pengeluaran</label>
+        <input id="expenseAmount" type="number" min="1" required placeholder="0">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%">
+        Simpan Pengeluaran
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* =========================
+   DATA & STORAGE
+========================= */
+
+const STORAGE_KEY = "bizora_data_v1";
+
+let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+  products: [],
+  transactions: [],
+  expenses: []
+};
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  renderAll();
 }
 
+function rupiah(value) {
+  return "Rp " + Number(value || 0).toLocaleString("id-ID");
+}
 
-function render(){
+function today() {
+  return new Date().toISOString().split("T")[0];
+}
 
-  const period=
-    document.getElementById("period")?.value
-    ||"7days";
+function formatDate(date) {
+  return new Date(date + "T00:00:00").toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
 
-  const ft=transactions.filter(t=>inPeriod(t.date,period));
+function uid() {
+  return Date.now() + Math.floor(Math.random() * 1000);
+}
 
-  const fe=expenses.filter(e=>inPeriod(e.date,period));
+/* =========================
+   NAVIGATION
+========================= */
 
-  const revenue=ft.reduce((s,t)=>s+t.total,0);
+const pageTitles = {
+  dashboard: ["Dashboard", "Ringkasan kondisi usaha kamu hari ini."],
+  transaksi: ["Transaksi", "Kelola penjualan usaha kamu."],
+  produk: ["Produk", "Kelola produk dan harga jual."],
+  stok: ["Stok Barang", "Pantau persediaan produk."],
+  pengeluaran: ["Pengeluaran", "Catat biaya operasional usaha."],
+  laporan: ["Laporan", "Analisis performa usaha kamu."]
+};
 
-  const gross=ft.reduce((s,t)=>s+t.profit,0);
-
-  const expenseTotal=fe.reduce((s,e)=>s+e.amount,0);
-
-  const net=gross-expenseTotal;
-
-
-  // DASHBOARD STATISTIK
-
-  document.getElementById("revenue").textContent=money(revenue);
-
-  document.getElementById("profit").textContent=money(net);
-
-  document.getElementById("count").textContent=ft.length;
-
-  document.getElementById("expenseTotal").textContent=money(expenseTotal);
-
-  document.getElementById("productCount").textContent=products.length;
-
-  document.getElementById("stockCount").textContent=
-    products.reduce((s,p)=>s+p.stock,0);
-
-  document.getElementById("margin").textContent=
-    revenue ? Math.round(net/revenue*100)+"%" : "0%";
-
-
-  // RINGKASAN
-
-  document.getElementById("businessNotice").textContent=
-
-    ft.length
-
-    ? `Pada periode ini, omzet ${money(revenue)} dengan laba bersih ${money(net)}. Pantau terus perkembangan usahamu!`
-
-    : "Belum ada transaksi pada periode ini. Tambahkan transaksi untuk melihat analisis bisnis.";
-
-
-  // GRAFIK
-
-  renderChart(ft);
-
-
-  // PRODUK TERLARIS
-
-  const ranking={};
-
-  transactions.forEach(t=>{
-
-    ranking[t.name]=(ranking[t.name]||0)+t.qty;
-
+function showPage(page) {
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
   });
 
-  const top=Object.entries(ranking)
+  document.querySelectorAll(".nav-item").forEach(n => {
+    n.classList.remove("active");
+  });
 
-    .sort((a,b)=>b[1]-a[1])
+  document.getElementById(page).classList.add("active");
 
-    .slice(0,5);
+  const nav = document.querySelector(`[data-page="${page}"]`);
+  if (nav) nav.classList.add("active");
 
+  document.getElementById("pageTitle").textContent = pageTitles[page][0];
+  document.getElementById("pageSubtitle").textContent = pageTitles[page][1];
 
-  document.getElementById("topProducts").innerHTML=
-
-    top.length
-
-    ? top.map((x,i)=>`
-
-      <div class="top-item">
-
-        <span>${i+1}. ${x[0]}</span>
-
-        <b>${x[1]} terjual</b>
-
-      </div>
-
-    `).join("")
-
-    : `<div class="empty">Belum ada penjualan</div>`;
-
-
-  // PERINGATAN STOK
-
-  const low=products.filter(p=>p.stock<=5);
-
-
-  document.getElementById("lowStock").innerHTML=
-
-    low.length
-
-    ? low.map(p=>`
-
-      <div class="top-item">
-
-        <span>${p.name}</span>
-
-        <span class="stock-warning">Stok ${p.stock}</span>
-
-      </div>
-
-    `).join("")
-
-    : `<div class="notice">Semua stok masih aman 👍</div>`;
-
-
-  // TABEL PRODUK
-
-  document.getElementById("productTable").innerHTML=
-
-    products.length
-
-    ? products.map(p=>`
-
-      <tr>
-
-        <td>${p.name}</td>
-
-        <td>${money(p.price)}</td>
-
-        <td>${money(p.cost)}</td>
-
-        <td>
-          ${p.stock}
-          ${p.stock<=5
-            ? '<span class="stock-warning">Menipis</span>'
-            : ''}
-        </td>
-
-        <td>
-          <button class="danger"
-            onclick="deleteProduct(${p.id})">
-            Hapus
-          </button>
-        </td>
-
-      </tr>
-
-    `).join("")
-
-    : `<tr><td colspan="5" class="empty">Belum ada produk</td></tr>`;
-
-
-  // PILIH PRODUK UNTUK TRANSAKSI
-
-  document.getElementById("transactionProduct").innerHTML=
-
-    `<option value="">Pilih produk</option>`
-
-    +products.map(p=>`
-
-      <option value="${p.id}">
-
-        ${p.name} — ${money(p.price)} (stok ${p.stock})
-
-      </option>
-
-    `).join("");
-
-
-  // RIWAYAT TRANSAKSI
-
-  document.getElementById("transactionTable").innerHTML=
-
-    transactions.length
-
-    ? [...transactions].reverse().map(t=>`
-
-      <tr>
-
-        <td>${t.name}</td>
-
-        <td>${t.qty}</td>
-
-        <td>${money(t.total)}</td>
-
-        <td>${money(t.profit)}</td>
-
-      </tr>
-
-    `).join("")
-
-    : `<tr><td colspan="4" class="empty">Belum ada transaksi</td></tr>`;
-
-
-  // TRANSAKSI TERBARU
-
-  document.getElementById("recentTransactions").innerHTML=
-
-    transactions.length
-
-    ? [...transactions].reverse().slice(0,5).map(t=>`
-
-      <tr>
-
-        <td>${t.name}</td>
-
-        <td>${t.qty}</td>
-
-        <td>${money(t.total)}</td>
-
-        <td>${dateLabel(t.date)}</td>
-
-      </tr>
-
-    `).join("")
-
-    : `<tr><td colspan="4" class="empty">Belum ada transaksi</td></tr>`;
-
-
-  // RIWAYAT PENGELUARAN
-
-  document.getElementById("expenseTable").innerHTML=
-
-    expenses.length
-
-    ? [...expenses].reverse().map(e=>`
-
-      <tr>
-
-        <td>${e.name}</td>
-
-        <td>${money(e.amount)}</td>
-
-        <td>${dateLabel(e.date)}</td>
-
-        <td>
-
-          <button class="danger"
-
-            onclick="deleteExpense(${e.id})">
-
-            Hapus
-
-          </button>
-
-        </td>
-
-      </tr>
-
-    `).join("")
-
-    : `<tr><td colspan="4" class="empty">Belum ada pengeluaran</td></tr>`;
-
-}r(){
-  const revenue=transactions.reduce((s,t)=>s+t.total,0);
-  const profit=transactions.reduce((s,t)=>s+t.profit,0);
-  const expenseTotal=expenses.reduce((s,e)=>s+e.amount,0);
-
-  document.getElementById("revenue").textContent=money(revenue);
-  document.getElementById("profit").textContent=money(profit-expenseTotal);
-  document.getElementById("count").textContent=transactions.length;
-  document.getElementById("expenseTotal").textContent=money(expenseTotal);
-  document.getElementById("productCount").textContent=products.length;
-  document.getElementById("stockCount").textContent=products.reduce((s,p)=>s+p.stock,0);
-
-  document.getElementById("productTable").innerHTML=products.length?
-    products.map(p=>`<tr>
-      <td>${p.name}</td>
-      <td>${money(p.price)}</td>
-      <td>${money(p.cost)}</td>
-      <td>${p.stock}</td>
-      <td><button class="danger" onclick="deleteProduct(${p.id})">Hapus</button></td>
-    </tr>`).join("") :
-    `<tr><td colspan="5" class="empty">Belum ada produk</td></tr>`;
-
-  document.getElementById("transactionProduct").innerHTML=
-    `<option value="">Pilih produk</option>`+
-    products.map(p=>`<option value="${p.id}">${p.name} — ${money(p.price)} (stok ${p.stock})</option>`).join("");
-
-  document.getElementById("transactionTable").innerHTML=transactions.length?
-    [...transactions].reverse().map(t=>`<tr>
-      <td>${t.name}</td><td>${t.qty}</td><td>${money(t.total)}</td><td>${money(t.profit)}</td>
-    </tr>`).join("") :
-    `<tr><td colspan="4" class="empty">Belum ada transaksi</td></tr>`;
-
-  document.getElementById("recentTransactions").innerHTML=transactions.length?
-    [...transactions].reverse().slice(0,5).map(t=>`<tr>
-      <td>${t.name}</td><td>${t.qty}</td><td>${money(t.total)}</td>
-    </tr>`).join("") :
-    `<tr><td colspan="3" class="empty">Belum ada transaksi</td></tr>`;
-
-  document.getElementById("expenseTable").innerHTML=expenses.length?
-    [...expenses].reverse().map(e=>`<tr>
-      <td>${e.name}</td><td>${money(e.amount)}</td>
-      <td><button class="danger" onclick="deleteExpense(${e.id})">Hapus</button></td>
-    </tr>`).join("") :
-    `<tr><td colspan="3" class="empty">Belum ada pengeluaran</td></tr>`;
+  if (page === "laporan") renderReports();
 }
 
-render();
+document.querySelectorAll(".nav-item").forEach(item => {
+  item.addEventListener("click", () => {
+    showPage(item.dataset.page);
+  });
+});
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(id) {
+  document.getElementById(id).classList.add("show");
+  updateProductSelects();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove("show");
+}
+
+document.querySelectorAll(".modal-overlay").forEach(modal => {
+  modal.addEventListener("click", event => {
+    if (event.target === modal) {
+      modal.classList.remove("show");
+    }
+  });
+});
+
+/* =========================
+   TOAST
+========================= */
+
+function toast(message) {
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.classList.add("show");
+
+  setTimeout(() => {
+    el.classList.remove("show");
+  }, 2500);
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+document.getElementById("productForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const product = {
+    id: uid(),
+    name: document.getElementById("productName").value.trim(),
+    cost: Number(document.getElementById("productCost").value),
+    price: Number(document.getElementById("productPrice").value),
+    stock: Number(document.getElementById("productStock").value)
+  };
+
+  data.products.push(product);
+
+  saveData();
+  closeModal("productModal");
+  this.reset();
+
+  toast("Produk berhasil ditambahkan!");
+});
+
+function deleteProduct(id) {
+  if (!confirm("Hapus produk ini?")) return;
+
+  data.products = data.products.filter(p => p.id !== id);
+  saveData();
+
+  toast("Produk berhasil dihapus");
+}
+
+function renderProducts() {
+  const tbody = document.getElementById("productTable");
+
+  if (data.products.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6">
+          <div class="empty">
+            <div class="empty-icon">📦</div>
+            <h3>Belum ada produk</h3>
+            <p>Tambahkan produk pertama kamu</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = data.products.map(p => `
+    <tr>
+      <td><strong>${escapeHTML(p.name)}</strong></td>
+      <td>${rupiah(p.cost)}</td>
+      <td>${rupiah(p.price)}</td>
+      <td>${p.stock}</td>
+      <td style="color:var(--primary);font-weight:700">
+        ${rupiah(p.price - p.cost)}
+      </td>
+      <td>
+        <button class="btn btn-danger btn-small"
+          onclick="deleteProduct(${p.id})">
+          Hapus
+        </button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+/* =========================
+   STOCK
+========================= */
+
+function updateProductSelects() {
+  const options = data.products.map(p => `
+    <option value="${p.id}">
+      ${escapeHTML(p.name)} — Stok ${p.stock}
+    </option>
+  `).join("");
+
+  document.getElementById("transactionProduct").innerHTML =
+    options || '<option value="">Belum ada produk</option>';
+
+  document.getElementById("stockProduct").innerHTML =
+    options || '<option value="">Belum ada produk</option>';
+}
+
+document.getElementById("stockForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const id = Number(document.getElementById("stockProduct").value);
+  const qty = Number(document.getElementById("stockQty").value);
+
+  const product = data.products.find(p => p.id === id);
+
+  if (!product || qty <= 0) return;
+
+  product.stock += qty;
+
+  saveData();
+  closeModal("stockModal");
+  this.reset();
+
+  toast("Stok berhasil ditambahkan!");
+});
+
+function renderStock() {
+  const tbody = document.getElementById("stockTable");
+
+  if (data.products.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4">
+          <div class="empty">
+            <div class="empty-icon">📦</div>
+            <h3>Belum ada produk</h3>
+            <p>Tambahkan produk terlebih dahulu</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = data.products.map(p => {
+    let status = "";
+
+    if (p.stock <= 0) {
+      status = '<span class="status status-red">Habis</span>';
+    } else if (p.stock <= 5) {
+      status = '<span class="status status-orange">Menipis</span>';
+    } else {
+      status = '<span class="status status-green">Aman</span>';
+    }
+
+    return `
+      <tr>
+        <td><strong>${escapeHTML(p.name)}</strong></td>
+        <td>${p.stock}</td>
+        <td>${status}</td>
+        <td>
+          <button class="btn btn-light btn-small"
+            onclick="quickAddStock(${p.id})">
+            + Tambah
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function quickAddStock(id) {
+  openModal("stockModal");
+  document.getElementById("stockProduct").value = id;
+}
+
+/* =========================
+   TRANSACTIONS
+========================= */
+
+const transactionProduct = document.getElementById("transactionProduct");
+const transactionQty = document.getElementById("transactionQty");
+
+function calculateTransaction() {
+  const id = Number(transactionProduct.value);
+  const qty = Number(transactionQty.value);
+
+  const product = data.products.find(p => p.id === id);
+
+  const total = product ? product.price * qty : 0;
+
+  document.getElementById("transactionTotal").textContent = rupiah(total);
+}
+
+transactionProduct.addEventListener("change", calculateTransaction);
+transactionQty.addEventListener("input", calculateTransaction);
+
+document.getElementById("transactionForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const productId = Number(transactionProduct.value);
+  const qty = Number(transactionQty.value);
+
+  const product = data.products.find(p => p.id === productId);
+
+  if (!product) {
+    toast("Produk belum tersedia");
+    return;
+  }
+
+  if (qty <= 0) {
+    toast("Jumlah tidak valid");
+    return;
+  }
+
+  if (product.stock < qty) {
+    toast("Stok tidak mencukupi!");
+    return;
+  }
+
+  const transaction = {
+    id: uid(),
+    productId: product.id,
+    productName: product.name,
+    qty: qty,
+    cost: product.cost,
+    price: product.price,
+    total: product.price * qty,
+    profit: (product.price - product.cost) * qty,
+    date: today()
+  };
+
+  product.stock -= qty;
+
+  data.transactions.push(transaction);
+
+  saveData();
+  closeModal("transactionModal");
+  this.reset();
+
+  toast("Transaksi berhasil disimpan!");
+});
+
+/* =========================
+   EXPENSES
+========================= */
+
+document.getElementById("expenseForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const expense = {
+    id: uid(),
+    category: document.getElementById("expenseCategory").value,
+    description: document.getElementById("expenseDescription").value.trim(),
+    amount: Number(document.getElementById("expenseAmount").value),
+    date: today()
+  };
+
+  data.expenses.push(expense);
+
+  saveData();
+  closeModal("expenseModal");
+  this.reset();
+
+  toast("Pengeluaran berhasil dicatat!");
+});
+
+function deleteExpense(id) {
+  if (!confirm("Hapus pengeluaran ini?")) return;
+
+  data.expenses = data.expenses.filter(e => e.id !== id);
+  saveData();
+
+  toast("Pengeluaran dihapus");
+}
+
+function renderExpenses() {
+  const tbody = document.getElementById("expenseTable");
+
+  if (data.expenses.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="empty">
+            <div class="empty-icon">💸</div>
+            <h3>Belum ada pengeluaran</h3>
+            <p>Pengeluaran usaha akan muncul di sini</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const sorted = [...data.expenses].sort((a,b) =>
+    b.date.localeCompare(a.date)
+  );
+
+  tbody.innerHTML = sorted.map(e => `
+    <tr>
+      <td>${formatDate(e.date)}</td>
+      <td>${escapeHTML(e.category)}</td>
+      <td>${escapeHTML(e.description)}</td>
+      <td><strong>${rupiah(e.amount)}</strong></td>
+      <td>
+        <button class="btn btn-danger btn-small"
+          onclick="deleteExpense(${e.id})">
+          Hapus
+        </button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function getTodayTransactions() {
+  return data.transactions.filter(t => t.date === today());
+}
+
+function getTodayExpenses() {
+  return data.expenses.filter(e => e.date === today());
+}
+
+function getMonthTransactions() {
+  const month = today().slice(0,7);
+
+  return data.transactions.filter(t =>
+    t.date.slice(0,7) === month
+  );
+}
+
+function renderDashboard() {
+  const transactions = getTodayTransactions();
+  const expenses = getTodayExpenses();
+
+  const revenue = transactions.reduce((sum,t) => sum + t.total, 0);
+  const profit = transactions.reduce((sum,t) => sum + t.profit, 0);
+  const expenseTotal = expenses.reduce((sum,e) => sum + e.amount, 0);
+
+  document.getElementById("todayRevenue").textContent = rupiah(revenue);
+  document.getElementById("todayProfit").textContent = rupiah(profit);
+  document.getElementById("todayTransactions").textContent = transactions.length;
+  document.getElementById("todayExpenses").textContent = rupiah(expenseTotal);
+
+  document.getElementById("totalProducts").textContent = data.products.length;
+
+  const lowStock = data.products.filter(p => p.stock <= 5).length;
+
+  document.getElementById("lowStockCount").textContent = lowStock;
+
+  const monthRevenue = getMonthTransactions().reduce((sum,t) => sum + t.total, 0);
+
+  document.getElementById("monthRevenue").textContent = rupiah(monthRevenue);
+
+  renderRecentTransactions();
+  drawChart();
+}
+
+function renderRecentTransactions() {
+  const tbody = document.getElementById("recentTransactions");
+
+  const sorted = [...data.transactions]
+    .sort((a,b) => b.date.localeCompare(a.date))
+    .slice(0,5);
+
+  if (sorted.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4">
+          <div class="empty">
+            <div class="empty-icon">🛒</div>
+            <h3>Belum ada transaksi</h3>
+            <p>Transaksi penjualan akan muncul di sini</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = sorted.map(t => `
+    <tr>
+      <td>${formatDate(t.date)}</td>
+      <td>${escapeHTML(t.productName)}</td>
+      <td>${t.qty}</td>
+      <td><strong>${rupiah(t.total)}</strong></td>
+    </tr>
+  `).join("");
+}
+
+/* =========================
+   TRANSACTION TABLE
+========================= */
+
+function deleteTransaction(id) {
+  if (!confirm("Hapus transaksi ini? Stok produk akan dikembalikan.")) return;
+
+  const transaction = data.transactions.find(t => t.id === id);
+
+  if (transaction) {
+    const product = data.products.find(p => p.id === transaction.productId);
+
+    if (product) {
+      product.stock += transaction.qty;
+    }
+  }
+
+  data.transactions = data.transactions.filter(t => t.id !== id);
+
+  saveData();
+
+  toast("Transaksi berhasil dihapus");
+}
+
+function renderTransactions() {
+  const tbody = document.getElementById("transactionTable");
+
+  if (data.transactions.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            <div class="empty-icon">🛒</div>
+            <h3>Belum ada transaksi</h3>
+            <p>Mulai catat penjualan usaha kamu</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const sorted = [...data.transactions].sort((a,b) =>
+    b.date.localeCompare(a.date)
+  );
+
+  tbody.innerHTML = sorted.map(t => `
+    <tr>
+      <td>${formatDate(t.date)}</td>
+      <td>${escapeHTML(t.productName)}</td>
+      <td>${t.qty}</td>
+      <td>${rupiah(t.cost * t.qty)}</td>
+      <td><strong>${rupiah(t.total)}</strong></td>
+      <td style="color:var(--primary);font-weight:700">
+        ${rupiah(t.profit)}
+      </td>
+      <td>
+        <button class="btn btn-danger btn-small"
+          onclick="deleteTransaction(${t.id})">
+          Hapus
+        </button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+/* =========================
+   REPORT
+========================= */
+
+function getPeriodDate(period) {
+  const now = new Date();
+
+  if (period === "today") {
+    return today();
+  }
+
+  if (period === "week") {
+    const date = new Date();
+    date.setDate(date.getDate() - 6);
+    return date.toISOString().split("T")[0];
+  }
+
+  if (period === "month") {
+    return today().slice(0,7);
+  }
+
+  return null;
+}
+
+function renderReports() {
+  const period = document.getElementById("reportPeriod").value;
+
+  let transactions = [...data.transactions];
+  let expenses = [...data.expenses];
+
+  const start = getPeriodDate(period);
+
+  if (period === "today") {
+    transactions = transactions.filter(t => t.date === start);
+    expenses = expenses.filter(e => e.date === start);
+  }
+
+  if (period === "week") {
+    transactions = transactions.filter(t => t.date >= start);
+    expenses = expenses.filter(e => e.date >= start);
+  }
+
+  if (period === "month") {
+    transactions = transactions.filter(t => t.date.slice(0,7) === start);
+    expenses = expenses.filter(e => e.date.slice(0,7) === start);
+  }
+
+  const revenue = transactions.reduce((sum,t) => sum + t.total, 0);
+  const cost = transactions.reduce((sum,t) => sum + t.cost * t.qty, 0);
+  const gross = revenue - cost;
+  const expenseTotal = expenses.reduce((sum,e) => sum + e.amount, 0);
+  const net = gross - expenseTotal;
+
+  document.getElementById("reportRevenue").textContent = rupiah(revenue);
+  document.getElementById("reportCost").textContent = rupiah(cost);
+  document.getElementById("reportGross").textContent = rupiah(gross);
+  document.getElementById("reportExpenses").textContent = rupiah(expenseTotal);
+  document.getElementById("reportNet").textContent = rupiah(net);
+  document.getElementById("reportCount").textContent = transactions.length;
+
+  const products = {};
+
+  transactions.forEach(t => {
+    if (!products[t.productName]) {
+      products[t.productName] = {
+        qty: 0,
+        revenue: 0
+      };
+    }
+
+    products[t.productName].qty += t.qty;
+    products[t.productName].revenue += t.total;
+  });
+
+  const best = Object.entries(products)
+    .sort((a,b) => b[1].qty - a[1].qty);
+
+  const tbody = document.getElementById("bestProducts");
+
+  if (best.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="3">
+          <div class="empty">
+            <h3>Belum ada data penjualan</h3>
+          </div>
+        </td>
+      </tr>
+    `;
+  } else {
+    tbody.innerHTML = best.map(([name,info]) => `
+      <tr>
+        <td><strong>${escapeHTML(name)}</strong></td>
+        <td>${info.qty}</td>
+        <td>${rupiah(info.revenue)}</td>
+      </tr>
+    `).join("");
+  }
+}
+
+/* =========================
+   CHART
+========================= */
+
+function drawChart() {
+  const canvas = document.getElementById("revenueChart");
+
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  const rect = canvas.getBoundingClientRect();
+
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+
+  ctx.scale(dpr, dpr);
+
+  const width = rect.width;
+  const height = rect.height;
+
+  const padding = {
+    top: 15,
+    bottom: 35,
+    left: 50,
+    right: 15
+  };
+
+  const chartWidth = width - padding.left - padding.right;
+  const chartHeight = height - padding.top - padding.bottom;
+
+  const dates = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+
+    dates.push(d.toISOString().split("T")[0]);
+  }
+
+  const values = dates.map(date => {
+    return data.transactions
+      .filter(t => t.date === date)
+      .reduce((sum,t) => sum + t.total, 0);
+  });
+
+  const maxValue = Math.max(...values, 10000);
+
+  ctx.clearRect(0, 0, width, height);
+
+  /* Grid */
+
+  ctx.strokeStyle = "#edf0ed";
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 4; i++) {
+    const y = padding.top + (chartHeight / 4) * i;
+
+    ctx.beginPath();
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(width - padding.right, y);
+    ctx.stroke();
+
+    const label = maxValue * (1 - i / 4);
+
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "10px DM Sans";
+
+    ctx.fillText(
+      label >= 1000000
+        ? (label / 1000000).toFixed(1) + "jt"
+        : label >= 1000
+          ? (label / 1000).toFixed(0) + "rb"
+          : label.toFixed(0),
+      5,
+      y + 3
+    );
+  }
+
+  const gap = 15;
+  const barWidth = (chartWidth - gap * 6) / 7;
+
+  values.forEach((value,index) => {
+    const barHeight = (value / maxValue) * chartHeight;
+
+    const x = padding.left + index * (barWidth + gap);
+    const y = padding.top + chartHeight - barHeight;
+
+    ctx.fillStyle = "#16a34a";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+      x,
+      y,
+      barWidth,
+      Math.max(barHeight, 2),
+      5
+    );
+
+    ctx.fill();
+
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "10px DM Sans";
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+      new Date(dates[index] + "T00:00:00")
+        .toLocaleDateString("id-ID", {day:"2-digit",month:"short"}),
+      x + barWidth / 2,
+      height - 10
+    );
+  });
+
+  ctx.textAlign = "left";
+}
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* =========================
+   RENDER ALL
+========================= */
+
+function renderAll() {
+  renderDashboard();
+  renderProducts();
+  renderStock();
+  renderTransactions();
+  renderExpenses();
+  renderReports();
+  updateProductSelects();
+}
+
+function updateDate() {
+  document.getElementById("currentDate").textContent =
+    new Date().toLocaleDateString("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+}
+
+/* =========================
+   INITIALIZATION
+========================= */
+
+updateDate();
+renderAll();
+
+window.addEventListener("resize", drawChart);
+
 </script>
 
 </body>
