@@ -7,201 +7,48 @@
 <title>Bizora - Business Dashboard</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-body {
-  background: #f5f7f6;
-  color: #1e293b;
-}
-
-.sidebar {
-  background: #123c32;
-  color: white;
-  width: 240px;
-  height: 100vh;
-  position: fixed;
-  padding: 25px 18px;
-}
-
-.logo {
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 35px;
-  color: #34d399;
-}
-
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.menu button {
-  padding: 14px;
-  border: none;
-  background: transparent;
-  color: #d1fae5;
-  text-align: left;
-  border-radius: 10px;
-  font-size: 15px;
-}
-
-.menu button.active,
-.menu button:hover {
-  background: #205548;
-  color: white;
-}
-
-.main {
-  margin-left: 240px;
-  padding: 30px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.header h1 {
-  font-size: 26px;
-}
-
-.subtitle {
-  color: #64748b;
-  margin-top: 8px;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-bottom: 25px;
-}
-
-.card {
-  background: white;
-  padding: 22px;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-}
-
-.card p {
-  color: #64748b;
-  font-size: 14px;
-}
-
-.card h2 {
-  margin-top: 14px;
-  font-size: 24px;
-}
-
-.green {
-  color: #059669;
-}
-
-.content {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 20px;
-}
-
-.content h3 {
-  margin-bottom: 20px;
-}
-
-button {
-  cursor: pointer;
-}
-
-.add-btn {
-  background: #059669;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 9px;
-  font-weight: bold;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 14px 10px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-}
-
-th {
-  color: #64748b;
-  font-size: 13px;
-}
-
-.empty {
-  text-align: center;
-  color: #94a3b8;
-  padding: 35px;
-}
-
-@media(max-width: 800px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-    padding: 15px;
-  }
-
-  .logo {
-    margin-bottom: 15px;
-  }
-
-  .menu {
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .menu button {
-    white-space: nowrap;
-  }
-
-  .main {
-    margin-left: 0;
-    padding: 18px;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .header h1 {
-    font-size: 22px;
-  }
-
-  .card {
-    padding: 16px;
-  }
-
-  .card h2 {
-    font-size: 19px;
-  }
-
-  table {
-    min-width: 500px;
-  }
-
-  .content {
-    overflow-x: auto;
-  }
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f5f7f6;color:#1e293b}
+.sidebar{background:#123c32;color:white;width:230px;position:fixed;height:100vh;padding:24px 15px}
+.logo{font-size:26px;font-weight:bold;color:#34d399;margin-bottom:30px}
+.menu{display:flex;flex-direction:column;gap:7px}
+.menu button{padding:13px;border:0;background:transparent;color:#d1fae5;text-align:left;border-radius:9px;cursor:pointer}
+.menu button.active,.menu button:hover{background:#205548;color:white}
+.main{margin-left:230px;padding:28px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.subtitle{color:#64748b;margin-top:7px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:22px}
+.card,.content{background:white;padding:20px;border-radius:14px;border:1px solid #e5e7eb;margin-bottom:18px}
+.card p{color:#64748b;font-size:13px}
+.card h2{margin-top:12px;font-size:23px}
+.green{color:#059669}
+h3{margin-bottom:16px}
+button{cursor:pointer}
+.primary{background:#059669;color:white;border:0;padding:11px 15px;border-radius:8px;font-weight:bold}
+.secondary{background:#e8f5ef;color:#047857;border:0;padding:10px 14px;border-radius:8px}
+.danger{color:#dc2626;border:0;background:#fee2e2;padding:7px 10px;border-radius:7px}
+table{width:100%;border-collapse:collapse;min-width:500px}
+th,td{padding:13px 9px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
+th{color:#64748b;font-size:12px}
+.content{overflow-x:auto}
+.page{display:none}
+.page.active{display:block}
+.empty{text-align:center;color:#94a3b8;padding:30px}
+.badge{background:#dcfce7;color:#15803d;padding:5px 9px;border-radius:20px;font-size:12px}
+.form{display:grid;gap:12px;margin-bottom:20px}
+.form input,.form select{padding:12px;border:1px solid #d1d5db;border-radius:8px;width:100%;background:white}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.notice{background:#ecfdf5;padding:14px;border-radius:10px;color:#065f46;margin-bottom:15px}
+@media(max-width:800px){
+.sidebar{position:relative;width:100%;height:auto;padding:15px}
+.logo{margin-bottom:15px}
+.menu{flex-direction:row;overflow-x:auto}
+.menu button{white-space:nowrap;font-size:13px;padding:11px}
+.main{margin:0;padding:16px}
+.cards{grid-template-columns:repeat(2,1fr)}
+.card{padding:15px}
+.card h2{font-size:19px}
+.header h1{font-size:22px}
 }
 </style>
 </head>
@@ -210,83 +57,306 @@ th {
 
 <div class="sidebar">
   <div class="logo">✦ Bizora</div>
-
   <div class="menu">
-    <button class="active">Dashboard</button>
-    <button>Transaksi</button>
-    <button>Produk</button>
-    <button>Stok</button>
-    <button>Pengeluaran</button>
-    <button>Laporan</button>
+    <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+    <button onclick="showPage('products',this)">Produk</button>
+    <button onclick="showPage('transactions',this)">Transaksi</button>
+    <button onclick="showPage('expenses',this)">Pengeluaran</button>
   </div>
 </div>
 
 <div class="main">
 
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
   <div class="header">
     <div>
       <h1>Dashboard</h1>
-      <p class="subtitle">Selamat datang di Bizora 👋</p>
+      <p class="subtitle">Ringkasan bisnis kamu hari ini 👋</p>
     </div>
   </div>
 
   <div class="cards">
-
     <div class="card">
-      <p>Omzet Hari Ini</p>
-      <h2>Rp0</h2>
+      <p>Omzet</p>
+      <h2 id="revenue">Rp0</h2>
     </div>
-
     <div class="card">
-      <p>Keuntungan</p>
-      <h2 class="green">Rp0</h2>
+      <p>Keuntungan Kotor</p>
+      <h2 class="green" id="profit">Rp0</h2>
     </div>
-
     <div class="card">
       <p>Transaksi</p>
-      <h2>0</h2>
+      <h2 id="count">0</h2>
     </div>
-
     <div class="card">
       <p>Pengeluaran</p>
-      <h2>Rp0</h2>
+      <h2 id="expenseTotal">Rp0</h2>
     </div>
-
   </div>
 
   <div class="content">
     <h3>Ringkasan Bisnis</h3>
-
-    <p style="color:#64748b">
-      Dashboard bisnis kamu akan menampilkan
-      omzet, keuntungan, transaksi, dan pengeluaran
-      secara otomatis.
-    </p>
+    <div class="notice">
+      Selamat datang di Bizora! Catat transaksi dan produk
+      kamu untuk melihat ringkasan bisnis secara otomatis.
+    </div>
+    <p>Jumlah produk: <b id="productCount">0</b></p>
+    <p style="margin-top:10px">Total stok: <b id="stockCount">0</b></p>
   </div>
 
   <div class="content">
     <h3>Transaksi Terbaru</h3>
-
     <table>
       <thead>
-        <tr>
-          <th>Transaksi</th>
-          <th>Produk</th>
-          <th>Total</th>
-        </tr>
+        <tr><th>Produk</th><th>Jumlah</th><th>Total</th></tr>
       </thead>
-
-      <tbody>
-        <tr>
-          <td colspan="3" class="empty">
-            Belum ada transaksi
-          </td>
-        </tr>
-      </tbody>
+      <tbody id="recentTransactions"></tbody>
     </table>
   </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="page">
+  <div class="header">
+    <div>
+      <h1>Produk</h1>
+      <p class="subtitle">Kelola produk dan stok usaha kamu</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Tambah Produk</h3>
+    <div class="form">
+      <input id="productName" placeholder="Nama produk">
+      <div class="form-row">
+        <input id="productPrice" type="number" placeholder="Harga jual">
+        <input id="productCost" type="number" placeholder="Modal produk">
+      </div>
+      <input id="productStock" type="number" placeholder="Jumlah stok">
+      <button class="primary" onclick="addProduct()">+ Tambah Produk</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Daftar Produk</h3>
+    <table>
+      <thead>
+        <tr><th>Produk</th><th>Harga</th><th>Modal</th><th>Stok</th><th>Aksi</th></tr>
+      </thead>
+      <tbody id="productTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TRANSACTIONS -->
+<section id="transactions" class="page">
+  <div class="header">
+    <div>
+      <h1>Transaksi</h1>
+      <p class="subtitle">Catat penjualan usaha kamu</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Tambah Transaksi</h3>
+    <div class="form">
+      <select id="transactionProduct"></select>
+      <input id="transactionQty" type="number" min="1" placeholder="Jumlah">
+      <button class="primary" onclick="addTransaction()">Simpan Transaksi</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Riwayat Transaksi</h3>
+    <table>
+      <thead>
+        <tr><th>Produk</th><th>Jumlah</th><th>Total</th><th>Keuntungan</th></tr>
+      </thead>
+      <tbody id="transactionTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- EXPENSES -->
+<section id="expenses" class="page">
+  <div class="header">
+    <div>
+      <h1>Pengeluaran</h1>
+      <p class="subtitle">Catat biaya operasional bisnis</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Tambah Pengeluaran</h3>
+    <div class="form">
+      <input id="expenseName" placeholder="Nama pengeluaran">
+      <input id="expenseAmount" type="number" placeholder="Jumlah (Rp)">
+      <button class="primary" onclick="addExpense()">Simpan Pengeluaran</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>Riwayat Pengeluaran</h3>
+    <table>
+      <thead><tr><th>Nama</th><th>Jumlah</th><th>Aksi</th></tr></thead>
+      <tbody id="expenseTable"></tbody>
+    </table>
+  </div>
+</section>
 
 </div>
 
+<script>
+const money = n => "Rp" + Number(n||0).toLocaleString("id-ID");
+
+let products = JSON.parse(localStorage.getItem("bizora_products")||"[]");
+let transactions = JSON.parse(localStorage.getItem("bizora_transactions")||"[]");
+let expenses = JSON.parse(localStorage.getItem("bizora_expenses")||"[]");
+
+function save(){
+  localStorage.setItem("bizora_products",JSON.stringify(products));
+  localStorage.setItem("bizora_transactions",JSON.stringify(transactions));
+  localStorage.setItem("bizora_expenses",JSON.stringify(expenses));
+  render();
+}
+
+function showPage(page,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+}
+
+function addProduct(){
+  const name=document.getElementById("productName").value.trim();
+  const price=Number(document.getElementById("productPrice").value);
+  const cost=Number(document.getElementById("productCost").value);
+  const stock=Number(document.getElementById("productStock").value);
+
+  if(!name||price<=0||cost<0||stock<0){
+    alert("Lengkapi data produk dengan benar.");
+    return;
+  }
+
+  products.push({id:Date.now(),name,price,cost,stock});
+  document.getElementById("productName").value="";
+  document.getElementById("productPrice").value="";
+  document.getElementById("productCost").value="";
+  document.getElementById("productStock").value="";
+  save();
+  alert("Produk berhasil ditambahkan!");
+}
+
+function deleteProduct(id){
+  if(confirm("Hapus produk ini?")){
+    products=products.filter(p=>p.id!==id);
+    save();
+  }
+}
+
+function addTransaction(){
+  const id=Number(document.getElementById("transactionProduct").value);
+  const qty=Number(document.getElementById("transactionQty").value);
+  const product=products.find(p=>p.id===id);
+
+  if(!product||qty<=0){
+    alert("Pilih produk dan masukkan jumlah.");
+    return;
+  }
+
+  if(qty>product.stock){
+    alert("Stok tidak mencukupi!");
+    return;
+  }
+
+  transactions.push({
+    id:Date.now(),
+    name:product.name,
+    qty,
+    total:product.price*qty,
+    profit:(product.price-product.cost)*qty,
+    date:new Date().toISOString()
+  });
+
+  product.stock-=qty;
+  document.getElementById("transactionQty").value="";
+  save();
+  alert("Transaksi berhasil disimpan!");
+}
+
+function addExpense(){
+  const name=document.getElementById("expenseName").value.trim();
+  const amount=Number(document.getElementById("expenseAmount").value);
+
+  if(!name||amount<=0){
+    alert("Masukkan nama dan nominal pengeluaran.");
+    return;
+  }
+
+  expenses.push({id:Date.now(),name,amount});
+  document.getElementById("expenseName").value="";
+  document.getElementById("expenseAmount").value="";
+  save();
+  alert("Pengeluaran berhasil dicatat!");
+}
+
+function deleteExpense(id){
+  if(confirm("Hapus pengeluaran ini?")){
+    expenses=expenses.filter(e=>e.id!==id);
+    save();
+  }
+}
+
+function render(){
+  const revenue=transactions.reduce((s,t)=>s+t.total,0);
+  const profit=transactions.reduce((s,t)=>s+t.profit,0);
+  const expenseTotal=expenses.reduce((s,e)=>s+e.amount,0);
+
+  document.getElementById("revenue").textContent=money(revenue);
+  document.getElementById("profit").textContent=money(profit-expenseTotal);
+  document.getElementById("count").textContent=transactions.length;
+  document.getElementById("expenseTotal").textContent=money(expenseTotal);
+  document.getElementById("productCount").textContent=products.length;
+  document.getElementById("stockCount").textContent=products.reduce((s,p)=>s+p.stock,0);
+
+  document.getElementById("productTable").innerHTML=products.length?
+    products.map(p=>`<tr>
+      <td>${p.name}</td>
+      <td>${money(p.price)}</td>
+      <td>${money(p.cost)}</td>
+      <td>${p.stock}</td>
+      <td><button class="danger" onclick="deleteProduct(${p.id})">Hapus</button></td>
+    </tr>`).join("") :
+    `<tr><td colspan="5" class="empty">Belum ada produk</td></tr>`;
+
+  document.getElementById("transactionProduct").innerHTML=
+    `<option value="">Pilih produk</option>`+
+    products.map(p=>`<option value="${p.id}">${p.name} — ${money(p.price)} (stok ${p.stock})</option>`).join("");
+
+  document.getElementById("transactionTable").innerHTML=transactions.length?
+    [...transactions].reverse().map(t=>`<tr>
+      <td>${t.name}</td><td>${t.qty}</td><td>${money(t.total)}</td><td>${money(t.profit)}</td>
+    </tr>`).join("") :
+    `<tr><td colspan="4" class="empty">Belum ada transaksi</td></tr>`;
+
+  document.getElementById("recentTransactions").innerHTML=transactions.length?
+    [...transactions].reverse().slice(0,5).map(t=>`<tr>
+      <td>${t.name}</td><td>${t.qty}</td><td>${money(t.total)}</td>
+    </tr>`).join("") :
+    `<tr><td colspan="3" class="empty">Belum ada transaksi</td></tr>`;
+
+  document.getElementById("expenseTable").innerHTML=expenses.length?
+    [...expenses].reverse().map(e=>`<tr>
+      <td>${e.name}</td><td>${money(e.amount)}</td>
+      <td><button class="danger" onclick="deleteExpense(${e.id})">Hapus</button></td>
+    </tr>`).join("") :
+    `<tr><td colspan="3" class="empty">Belum ada pengeluaran</td></tr>`;
+}
+
+render();
+</script>
+
 </body>
 </html>
+
