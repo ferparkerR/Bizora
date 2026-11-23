@@ -912,6 +912,98 @@ tr:last-child td {
         </button>
       </div>
 
+function renderTransactions() {
+  const tbody = document.getElementById("transactionTable");
+
+  const searchInput = document.getElementById("transactionSearch");
+  const filterInput = document.getElementById("transactionFilter");
+
+  const search = searchInput ? searchInput.value.toLowerCase().trim() : "";
+  const filter = filterInput ? filterInput.value : "all";
+
+  let transactions = [...data.transactions];
+
+  // FILTER PENCARIAN PRODUK
+  if (search) {
+    transactions = transactions.filter(t =>
+      t.productName.toLowerCase().includes(search)
+    );
+  }
+
+  // FILTER TANGGAL
+  const currentDate = today();
+
+  if (filter === "today") {
+    transactions = transactions.filter(t =>
+      t.date === currentDate
+    );
+  }
+
+  if (filter === "week") {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 6);
+
+    const start = [
+      startDate.getFullYear(),
+      String(startDate.getMonth() + 1).padStart(2, "0"),
+      String(startDate.getDate()).padStart(2, "0")
+    ].join("-");
+
+    transactions = transactions.filter(t =>
+      t.date >= start && t.date <= currentDate
+    );
+  }
+
+  if (filter === "month") {
+    const currentMonth = currentDate.slice(0, 7);
+
+    transactions = transactions.filter(t =>
+      t.date.slice(0, 7) === currentMonth
+    );
+  }
+
+  // URUTKAN TERBARU
+  transactions.sort((a,b) =>
+    b.date.localeCompare(a.date)
+  );
+
+  // DATA KOSONG
+  if (transactions.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            <div class="empty-icon">🔍</div>
+            <h3>Transaksi tidak ditemukan</h3>
+            <p>Coba ubah kata pencarian atau filter tanggal</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  // TAMPILKAN DATA
+  tbody.innerHTML = transactions.map(t => `
+    <tr>
+      <td>${formatDate(t.date)}</td>
+      <td>${escapeHTML(t.productName)}</td>
+      <td>${t.qty}</td>
+      <td>${rupiah(t.cost * t.qty)}</td>
+      <td><strong>${rupiah(t.total)}</strong></td>
+      <td style="color:var(--primary);font-weight:700">
+        ${rupiah(t.profit)}
+      </td>
+      <td>
+        <button class="btn btn-danger btn-small"
+          onclick="deleteTransaction(${t.id})">
+          Hapus
+        </button>
+      </td>
+    </tr>
+  `).join("");
+}
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -1837,23 +1929,99 @@ function deleteTransaction(id) {
   toast("Transaksi berhasil dihapus");
 }
 
+
 function renderTransactions() {
   const tbody = document.getElementById("transactionTable");
 
-  if (data.transactions.length === 0) {
+  const searchInput = document.getElementById("transactionSearch");
+  const filterInput = document.getElementById("transactionFilter");
+
+  const search = searchInput ? searchInput.value.toLowerCase().trim() : "";
+  const filter = filterInput ? filterInput.value : "all";
+
+  let transactions = [...data.transactions];
+
+  // FILTER PENCARIAN PRODUK
+  if (search) {
+    transactions = transactions.filter(t =>
+      t.productName.toLowerCase().includes(search)
+    );
+  }
+
+  // FILTER TANGGAL
+  const currentDate = today();
+
+  if (filter === "today") {
+    transactions = transactions.filter(t =>
+      t.date === currentDate
+    );
+  }
+
+  if (filter === "week") {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 6);
+
+    const start = [
+      startDate.getFullYear(),
+      String(startDate.getMonth() + 1).padStart(2, "0"),
+      String(startDate.getDate()).padStart(2, "0")
+    ].join("-");
+
+    transactions = transactions.filter(t =>
+      t.date >= start && t.date <= currentDate
+    );
+  }
+
+  if (filter === "month") {
+    const currentMonth = currentDate.slice(0, 7);
+
+    transactions = transactions.filter(t =>
+      t.date.slice(0, 7) === currentMonth
+    );
+  }
+
+  // URUTKAN TERBARU
+  transactions.sort((a,b) =>
+    b.date.localeCompare(a.date)
+  );
+
+  // DATA KOSONG
+  if (transactions.length === 0) {
     tbody.innerHTML = `
       <tr>
         <td colspan="7">
           <div class="empty">
-            <div class="empty-icon">🛒</div>
-            <h3>Belum ada transaksi</h3>
-            <p>Mulai catat penjualan usaha kamu</p>
+            <div class="empty-icon">🔍</div>
+            <h3>Transaksi tidak ditemukan</h3>
+            <p>Coba ubah kata pencarian atau filter tanggal</p>
           </div>
         </td>
       </tr>
     `;
     return;
   }
+
+  // TAMPILKAN DATA
+  tbody.innerHTML = transactions.map(t => `
+    <tr>
+      <td>${formatDate(t.date)}</td>
+      <td>${escapeHTML(t.productName)}</td>
+      <td>${t.qty}</td>
+      <td>${rupiah(t.cost * t.qty)}</td>
+      <td><strong>${rupiah(t.total)}</strong></td>
+      <td style="color:var(--primary);font-weight:700">
+        ${rupiah(t.profit)}
+      </td>
+      <td>
+        <button class="btn btn-danger btn-small"
+          onclick="deleteTransaction(${t.id})">
+          Hapus
+        </button>
+      </td>
+    </tr>
+  `).join("");
+}
+
 
   const sorted = [...data.transactions].sort((a,b) =>
     b.date.localeCompare(a.date)
